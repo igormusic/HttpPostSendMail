@@ -27,21 +27,24 @@ namespace HttpPostSendMail
             var htmlBuilder = new StringBuilder();
 
             foreach (var key in req.Form.Keys) {
-                stringBuilder.AppendLine($"{key}:{req.Form[key].ToString()}"); 
-                htmlBuilder.AppendLine($"<p> {key}:{req.Form[key].ToString()} </p>");
+                stringBuilder.AppendLine($"{key} : {req.Form[key].ToString()}"); 
+                htmlBuilder.AppendLine($"<p> {key} : {req.Form[key].ToString()} </p>");
             }
 
             var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+            var redirectUrl = Environment.GetEnvironmentVariable("SM_FORM_REDIRECT_URL");
+            var emailTo = Environment.GetEnvironmentVariable("SM_TO_EMAIL");
+
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("igormusic@tvmsoftware.com", "Igor Music");
-            var subject = "Test SendGrid";
-            var to = new EmailAddress("jelenabozic@hotmail.com", "Jelena Bozic");
+            var from = new EmailAddress(emailTo);
+            var subject = "WithoutMS Client Inquiry";
+            var to = new EmailAddress(emailTo);
             var plainTextContent = stringBuilder.ToString();
             var htmlContent = htmlBuilder.ToString();
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
 
-            return new RedirectResult("https://www.google.com");
+            return new RedirectResult(redirectUrl);
         }
     }
 }
