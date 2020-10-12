@@ -34,10 +34,10 @@ namespace HttpPostSendMail
             var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
             var redirectUrl = Environment.GetEnvironmentVariable("SM_FORM_REDIRECT_URL");
             var emailTo = Environment.GetEnvironmentVariable("SM_TO_EMAIL");
+            var subject = Environment.GetEnvironmentVariable("SM_SUBJECT");
 
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress(emailTo);
-            var subject = "WithoutMS Client Inquiry";
             var to = new EmailAddress(emailTo);
             var plainTextContent = stringBuilder.ToString();
             var htmlContent = htmlBuilder.ToString();
